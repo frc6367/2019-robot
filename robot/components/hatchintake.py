@@ -14,3 +14,5 @@ class Hatchintake:
     def execute(self):
         self.hatch_intake_motor.set(self.speed)
 
+    def execute(self):
+        pass
