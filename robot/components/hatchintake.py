@@ -8,3 +8,5 @@ class Hatchintake:
     def setup(self):
         pass
 
+    def execute(self):
+        pass
