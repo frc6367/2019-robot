@@ -28,6 +28,9 @@ class MyRobot(MagicRobot):
         self.drive_r2 = ctre.WPI_TalonSRX(5)
         self.drive_r3 = ctre.WPI_TalonSRX(6)
 
+        self.elevator_motor1 = ctre.WPI_TalonSRX(7)
+        self.elevator_motor2 = ctre.WPI_TalonSRX(8)
+
     def teleopPeriodic(self):
         """Place code here that does things as a result of operator
            actions"""
