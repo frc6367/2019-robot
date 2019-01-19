@@ -36,13 +36,7 @@ class MyRobot(MagicRobot):
     def teleopPeriodic(self):
         """Place code here that does things as a result of operator
            actions"""
-<<<<<<< HEAD
         self.drivetrain.drive(self.joystick.getY(), -self.joystick.getX())
-=======
-        self.drivetrain.drive(
-            -self.joystick.getY() * 0.75, self.joystick.getThrottle() * 0.5
-        )
->>>>>>> bf6602831b78fe3dfc36d7313e6de297464a1e5c
 
 
 if __name__ == "__main__":
