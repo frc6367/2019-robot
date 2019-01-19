@@ -37,16 +37,30 @@ class MyRobot(MagicRobot):
 
         self.hatch_intake_motor = ctre.WPI_TalonSRX(9)
 
+        self.driveMode = True
+
     def teleopPeriodic(self):
         """Place code here that does things as a result of operator
            actions"""
+        self.mode()
 
+    def mode(self):
+        if self.joystick.getRawButtonReleased(2):
+            self.driveMode = not self.driveMode
+
+        if self.driveMode:
+            self.drivingMode()
+        else:
+            self.manipulateMode()
+
+    def drivingMode(self):
         self.drivetrain.drive(
             -self.joystick.getY() * 0.75, self.joystick.getThrottle() * 0.5
         )
-        self.arm.move(self.joystick.getTwist())
+        self.arm.move(0)
 
-        self.drivetrain.drive(self.joystick.getY(), -self.joystick.getX())
+    def manipulateMode(self):
+        self.arm.move(self.joystick.getY())
 
 
 if __name__ == "__main__":
