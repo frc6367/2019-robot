@@ -7,6 +7,7 @@ import ctre
 from components.drivetrain import Drivetrain
 from components.elevator import Elevator
 from components.arm import Arm
+from components.hatchintake import Hatchintake
 
 
 class MyRobot(MagicRobot):
@@ -18,6 +19,7 @@ class MyRobot(MagicRobot):
     drivetrain: Drivetrain
     elevator: Elevator
     arm: Arm
+    hatchintake: Hatchintake
 
     def createObjects(self):
         """Initialize all wpilib motors & sensors"""
@@ -61,6 +63,12 @@ class MyRobot(MagicRobot):
 
     def manipulateMode(self):
         self.arm.move(self.joystick.getY())
+        if self.joystick.getRawButton(5):
+            self.hatchintake.move(1)
+        elif self.joystick.getRawButton(3):
+            self.hatchintake.move(-1)
+        else:
+            self.hatchintake.move(0)
 
 
 if __name__ == "__main__":

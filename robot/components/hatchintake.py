@@ -3,8 +3,14 @@ import ctre
 
 class Hatchintake:
 
-    motor: ctre.WPI_TalonSRX
+    hatch_intake_motor: ctre.WPI_TalonSRX
 
     def setup(self):
-        pass
+        self.speed = 0
+
+    def move(self, speed):
+        self.speed = speed
+
+    def execute(self):
+        self.hatch_intake_motor.set(self.speed)
 
