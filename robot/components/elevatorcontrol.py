@@ -6,7 +6,7 @@ from components.elevator import Elevator
 class ElevatorControl:
 
     elevator: Elevator
-
+    
     def setup(self):
         self.state = 0
         self.elevator = Elevator()
@@ -34,7 +34,7 @@ class ElevatorControl:
 
     def execute(self):
         # acquire button input and assign state.
-
+        if self.joystick.getRawButton()
         # state machine based on button input
         if self.state == 1:  # first hatch
             self.elevator_position_hatch1()
