@@ -65,12 +65,20 @@ class MyRobot(MagicRobot):
 
     def manipulateMode(self):
         self.arm.move(self.joystick.getY())
+        # HATCH INTAKE
         if self.joystick.getRawButton(5):
             self.hatchintake.move(1)
         elif self.joystick.getRawButton(3):
             self.hatchintake.move(-1)
         else:
             self.hatchintake.move(0)
+        # CARGO INTAKE
+        if self.joystick.getRawButton(6):
+            self.cargo.setSpeed(1)
+        elif self.joystick.getRawButton(4):
+            self.cargo.setSpeed(-1)
+        else:
+            self.cargo.stop()
 
 
 if __name__ == "__main__":

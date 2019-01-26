@@ -14,5 +14,5 @@ class ArmControl:
         #aquire button input and assing state
         #state machine
         if(state == 0):
-            
+                
         elif(state == 1):

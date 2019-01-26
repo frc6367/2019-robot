@@ -11,5 +11,8 @@ class Cargo:
     def setSpeed(self, speed):
         self.speed = speed
 
+    def stop(self):
+        self.speed = 0
+
     def execute(self):
-        self.cargo_intake_motor.set()
+        self.cargo_intake_motor.set(self.speed)
