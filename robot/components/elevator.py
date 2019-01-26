@@ -7,6 +7,8 @@ class Elevator:
     motor2: ctre.WPI_TalonSRX
 
     def setup(self):
+
+        # pid constants 
         self.kSlotIdx = 0
         self.kPIDLoopIdx = 0
         self.kTimeoutMs = 10

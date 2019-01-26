@@ -9,6 +9,7 @@ from components.elevator import Elevator
 from components.arm import Arm
 from components.hatch import Hatchintake
 from components.cargo import Cargo
+from components.armControl import ArmControl
 
 
 class MyRobot(MagicRobot):
@@ -22,7 +23,8 @@ class MyRobot(MagicRobot):
     arm: Arm
     hatchintake: Hatchintake
     cargo: Cargo
-
+    ArmControl: ArmControl
+    
     def createObjects(self):
         """Initialize all wpilib motors & sensors"""
         self.joystick = wpilib.Joystick(0)
