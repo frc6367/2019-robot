@@ -7,12 +7,15 @@ class Cargo:
 
     def setup(self):
         self.speed = 0
+        self.enabled = True
 
     def setSpeed(self, speed):
         self.speed = speed
 
     def stop(self):
         self.speed = 0
+        self.enabled = False
 
     def execute(self):
-        self.cargo_intake_motor.set(self.speed)
+        if self.enabled:
+            self.cargo_intake_motor.set(self.speed)

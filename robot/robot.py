@@ -41,44 +41,45 @@ class MyRobot(MagicRobot):
         self.cargo_intake_motor = ctre.WPI_TalonSRX(11)
         self.hatch_intake_motor = ctre.WPI_TalonSRX(9)
 
-        self.driveMode = True
+        # self.driveMode = True
 
     def teleopPeriodic(self):
         """Place code here that does things as a result of operator
            actions"""
-        self.mode()
+        # self.mode()
+        self.drive()
 
-    def mode(self):
-        if self.joystick.getRawButtonReleased(2):
-            self.driveMode = not self.driveMode
+    # def mode(self):
+    #     if self.joystick.getRawButtonReleased(2):
+    #         self.driveMode = not self.driveMode
 
-        if self.driveMode:
-            self.drivingMode()
-        else:
-            self.manipulateMode()
+    #     if self.driveMode:
+    #         self.drivingMode()
+    #     else:
+    #         self.manipulateMode()
 
-    def drivingMode(self):
+    def drive(self):
         self.drivetrain.drive(
             -self.joystick.getY() * 0.75, self.joystick.getThrottle() * 0.5
         )
         self.arm.move(0)
 
-    def manipulateMode(self):
-        self.arm.move(self.joystick.getY())
-        # HATCH INTAKE
-        if self.joystick.getRawButton(5):
-            self.hatchintake.move(1)
-        elif self.joystick.getRawButton(3):
-            self.hatchintake.move(-1)
-        else:
-            self.hatchintake.move(0)
-        # CARGO INTAKE
-        if self.joystick.getRawButton(6):
-            self.cargo.setSpeed(1)
-        elif self.joystick.getRawButton(4):
-            self.cargo.setSpeed(-1)
-        else:
-            self.cargo.stop()
+    # def manipulateMode(self):
+    #     self.arm.move(self.joystick.getY())
+    #     # HATCH INTAKE
+    #     if self.joystick.getRawButton(5):
+    #         self.hatchintake.move(1)
+    #     elif self.joystick.getRawButton(3):
+    #         self.hatchintake.move(-1)
+    #     else:
+    #         self.hatchintake.move(0)
+    #     # CARGO INTAKE
+    #     if self.joystick.getRawButton(6):
+    #         self.cargo.setSpeed(1)
+    #     elif self.joystick.getRawButton(4):
+    #         self.cargo.setSpeed(-1)
+    #     else:
+    #         self.cargo.stop()
 
 
 if __name__ == "__main__":
