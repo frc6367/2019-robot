@@ -15,7 +15,7 @@ class Arm:
 
     def execute(self):
         # Sends outputs to the motors
-        self.arm_motor.set()
+        pass
 
     # def move(self, speed):
     #     self.arm_motor.set(speed)

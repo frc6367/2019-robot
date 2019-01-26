@@ -4,6 +4,7 @@ import ctre
 class Cargo:
 
     cargo_intake_motor: ctre.WPI_TalonSRX
+    testMotor: ctre.WPI_TalonSRX
 
     def setup(self):
         self.speed = 0
