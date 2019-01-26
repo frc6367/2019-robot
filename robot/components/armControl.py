@@ -13,7 +13,7 @@ class ArmControl:
 
     def execute(self):
 
-        # aquire button input and assing state
+        # aquire button input and passing state
         # state machine
         if self.state == 0:
             pass
