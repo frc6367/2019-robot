@@ -72,4 +72,10 @@ class Arm:
 
     def execute(self):
         # Sends outputs to the motors
+
         self.arm_motor.set(ctre.WPI_TalonSRX.ControlMode.MotionMagic, self.target)
+
+
+    # def move(self, speed):
+    #     self.arm_motor.set(speed)
+

@@ -12,7 +12,8 @@ class Elevator:
         self.kSlotIdx = 0
         self.kPIDLoopIdx = 0
         self.kTimeoutMs = 10
-        self.target = 0
+        self.target1 = 0
+        print(str(self.target1) + " test")
 
         self.motor2.follow(self.motor1)
         # setup information for motion magic
@@ -62,7 +63,9 @@ class Elevator:
 
     ## Set a target position
     def set_target(self, pos):
-        self.target = pos
+        print(pos)
+        self.target1 = pos
+        print(self.target1)
 
     ## STOP
     def stop(self):
@@ -70,5 +73,6 @@ class Elevator:
 
     ## Incremental up and down
     def execute(self):
-        self.motor1.set(ctre.WPI_TalonSRX.ControlMode.MotionMagic, self.target)
+        print(self.target1)
+        self.motor1.set(ctre.WPI_TalonSRX.ControlMode.MotionMagic, 15)
 
