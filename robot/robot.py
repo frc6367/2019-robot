@@ -29,7 +29,7 @@ class MyRobot(MagicRobot):
     def createObjects(self):
         """Initialize all wpilib motors & sensors"""
         self.joystick = wpilib.Joystick(0)
-
+        self.armUp = False
         self.drive_l1 = ctre.WPI_TalonSRX(1)
         self.drive_l2 = ctre.WPI_TalonSRX(2)
         self.drive_l3 = ctre.WPI_TalonSRX(3)
@@ -54,7 +54,7 @@ class MyRobot(MagicRobot):
         self.drive()
         self.cargoButtons()
         self.elevatorButtons()
-
+        self.armButtons()
     # def mode(self):
     #     if self.joystick.getRawButtonReleased(2):
     #         self.driveMode = not self.driveMode
@@ -93,6 +93,13 @@ class MyRobot(MagicRobot):
         elif self.joystick.getRawButton(12):
             self.elevatorControl.setLevel(5)
 
+    def armButtons(self):
+        if self.joystick.getRawButtonReleased(1):
+            self.armUp = not self.armUp
+            if self.armUp:
+                self.ArmControl.setPos(1)
+            else:
+                self.ArmControl.setPos(0)
     # def manipulateMode(self):
     #     self.arm.move(self.joystick.getY())
     #     # HATCH INTAKE

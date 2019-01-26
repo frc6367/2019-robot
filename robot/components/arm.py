@@ -7,7 +7,7 @@ class Arm:
 
     def setup(self):
         # Position starts at 0
-        self.pos = 0
+        self.target = 0
 
         # pid constants 
         self.kSlotIdx = 0
@@ -64,7 +64,7 @@ class Arm:
 
     def setPos(self, pos):
         # Sets the position of the Arm
-        self.pos = pos
+        self.target = pos
 
     ## STOP
     def stop(self):
