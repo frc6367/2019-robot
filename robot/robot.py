@@ -25,7 +25,7 @@ class MyRobot(MagicRobot):
     hatch: Hatchintake
     cargo: Cargo
     ArmControl: ArmControl
-    
+
     def createObjects(self):
         """Initialize all wpilib motors & sensors"""
         self.joystick = wpilib.Joystick(0)
@@ -55,6 +55,7 @@ class MyRobot(MagicRobot):
         self.cargoButtons()
         self.elevatorButtons()
         self.armButtons()
+
     # def mode(self):
     #     if self.joystick.getRawButtonReleased(2):
     #         self.driveMode = not self.driveMode
@@ -100,6 +101,13 @@ class MyRobot(MagicRobot):
                 self.ArmControl.setPos(1)
             else:
                 self.ArmControl.setPos(0)
+
+    def hatchButtons(self):
+        if self.joystick.getRawButton(12):  # WE NEED TO REASIGN THIS BUTTON
+            self.hatch.move(1)
+        elif self.joystick.getRawButton(11):
+            self.hatch.move(1)
+
     # def manipulateMode(self):
     #     self.arm.move(self.joystick.getY())
     #     # HATCH INTAKE
