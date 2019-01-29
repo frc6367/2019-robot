@@ -8,7 +8,7 @@ class Elevator:
 
     def setup(self):
 
-        # pid constants 
+        # pid constants
         self.kSlotIdx = 0
         self.kPIDLoopIdx = 0
         self.kTimeoutMs = 10
@@ -74,5 +74,5 @@ class Elevator:
     ## Incremental up and down
     def execute(self):
         print(self.target1)
-        self.motor1.set(ctre.WPI_TalonSRX.ControlMode.MotionMagic, 15)
+        self.motor1.set(ctre.WPI_TalonSRX.ControlMode.MotionMagic, self.target1)
 
