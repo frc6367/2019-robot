@@ -8,7 +8,6 @@ class Shifter:
 
     def setup(self):
         self.gear = 0
-        self.shiftSolenoid2.follow(self.shiftSolenoid1)
 
     def upShift(self):
         self.gear = 1
@@ -18,3 +17,4 @@ class Shifter:
 
     def execute(self):
         self.shiftSolenoid1.set(self.gear)
+        self.shiftSolenoid2.set(self.gear)
