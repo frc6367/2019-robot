@@ -60,3 +60,9 @@ class PhysicsEngine(object):
 
         x, y, angle = self.drivetrain.get_distance(l_motor, r_motor, tm_diff)
         self.physics_controller.distance_drive(x, y, angle)
+
+        # Sorta simulate the elevator
+        talon_data = hal_data["CAN"][7]
+        speed = int(4096 * 4 * talon_data["value"] * tm_diff)
+        talon_data["quad_position"] += speed
+        talon_data["quad_velocity"] = speed
