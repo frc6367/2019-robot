@@ -30,5 +30,8 @@ class Drivetrain:
         self.speed = -speed
         self.rotation = -rotation
 
+    def autoAlign(self, rotation):
+        self.rotation = rotation
+
     def execute(self):
         self.ddrive.arcadeDrive(self.speed, self.rotation)

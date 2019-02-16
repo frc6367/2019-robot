@@ -4,7 +4,6 @@ import ctre
 class Elevator:
 
     motor1: ctre.WPI_TalonSRX
-    motor2: ctre.WPI_TalonSRX
 
     def setup(self):
 
@@ -14,7 +13,6 @@ class Elevator:
         self.kTimeoutMs = 10
         self.target1 = 0
 
-        self.motor2.follow(self.motor1)
         # setup information for motion magic
 
         self.loops = 0
