@@ -12,9 +12,9 @@ class ArmControl:
         self.state = 0
 
     def downPosition(self):
-        self.arm.setPos(0)
+        self.arm.setPos(1)
     def upPosition(self):
-        self.arm.setPos(.25)
+        self.arm.setPos(1)
 
     def setPos(self, pos):
         self.state = pos

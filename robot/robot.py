@@ -3,6 +3,7 @@
 import wpilib
 from magicbot import MagicRobot
 import ctre
+import rev
 
 from components.flashdrive import Drivetrain
 from components.elevator import Elevator
@@ -42,15 +43,16 @@ class MyRobot(MagicRobot):
         self.elevator_motor1 = ctre.WPI_TalonSRX(7)
         self.elevator_motor2 = ctre.WPI_TalonSRX(8)
 
-        self.arm_motor = ctre.WPI_TalonSRX(10)
+        self.arm_motor = rev.CANSparkMax(9, rev.MotorType.kBrushless)
         self.cargo_intake_motor = ctre.WPI_TalonSRX(11)
         self.hatch_intake_motor = ctre.WPI_TalonSRX(9)
         self.testMotor = ctre.WPI_TalonSRX(12)
 
-        self.shiftSolenoid1 = wpilib.Solenoid(0)
-        self.shiftSolenoid2 = wpilib.Solenoid(1)
+        self.shiftSolenoid1 = wpilib.DoubleSolenoid(0,1)
+        self.shiftSolenoid2 = wpilib.DoubleSolenoid(2,3)
 
         self.inMode1 = True
+        self.gear = 1
         # self.driveMode = True
 
     def teleopPeriodic(self):
@@ -66,7 +68,6 @@ class MyRobot(MagicRobot):
             self.mode2()
 
     def mode1(self):
-        pass
         self.drive()
         self.armButtons()  # BUTTONS: 2
         self.hatchButtons()  # BUTTONS: 6 and 4
@@ -74,8 +75,8 @@ class MyRobot(MagicRobot):
 
     def mode2(self):
         self.drive()
-        self.elevatorButtons()  # BUTTONS: 7,9,5,8,10,6
-        # self.shiftButtons()  # BUTTONS: 3 and 4
+        self.elevatorButtons()  # BUTTONS: 7 - 12
+        self.shiftButtons()  # BUTTONS: 3 or 4
 
     def drive(self):
         self.drivetrain.drive(
@@ -97,22 +98,22 @@ class MyRobot(MagicRobot):
             self.elevatorControl.setLevel(2)
         elif self.joystick.getRawButton(9):
             self.elevatorControl.setLevel(4)
-        elif self.joystick.getRawButton(5):
+        elif self.joystick.getRawButton(11):
             self.elevatorControl.setLevel(6)
         elif self.joystick.getRawButton(8):
             self.elevatorControl.setLevel(1)
         elif self.joystick.getRawButton(10):
             self.elevatorControl.setLevel(3)
-        elif self.joystick.getRawButton(6):
+        elif self.joystick.getRawButton(12):
             self.elevatorControl.setLevel(5)
 
     def armButtons(self):
         if self.joystick.getRawButtonReleased(2):
             self.armUp = not self.armUp
             if self.armUp:
-                self.ArmControl.setPos(1)
+                self.arm.setPos(100)
             else:
-                self.ArmControl.setPos(0)
+                self.arm.setPos(0)
 
     def hatchButtons(self):
         if self.joystick.getRawButton(6):
@@ -123,10 +124,17 @@ class MyRobot(MagicRobot):
             self.hatch.move(0)
 
     def shiftButtons(self):
-        if self.joystick.getRawButton(3):
-            self.shifter.downShift()
-        elif self.joystick.getRawButton(4):
-            self.shifter.upShift()
+        if self.joystick.getRawButtonPressed(3):
+            self.shifter.turnOn()
+            if self.gear == 1:
+                self.gear = 2
+                self.shifter.upShift()
+            else:
+                self.gear = 1
+                self.shifter.downShift()
+
+        if self.joystick.getRawButtonReleased(3):
+            self.shifter.turnOff()
 
 
 if __name__ == "__main__":
