@@ -33,11 +33,11 @@ class MyRobot(MagicRobot):
         self.joystick = wpilib.Joystick(0)
         self.armUp = False
         self.drive_l1 = ctre.WPI_TalonSRX(1)
-        self.drive_l2 = ctre.WPI_TalonSRX(2)
-        self.drive_l3 = ctre.WPI_TalonSRX(3)
+        self.drive_l2 = ctre.VictorSPX(2)
+        self.drive_l3 = ctre.VictorSPX(3)
         self.drive_r1 = ctre.WPI_TalonSRX(4)
-        self.drive_r2 = ctre.WPI_TalonSRX(5)
-        self.drive_r3 = ctre.WPI_TalonSRX(6)
+        self.drive_r2 = ctre.VictorSPX(5)
+        self.drive_r3 = ctre.VictorSPX(6)
 
         self.elevator_motor1 = ctre.WPI_TalonSRX(7)
         self.elevator_motor2 = ctre.WPI_TalonSRX(8)
@@ -66,15 +66,16 @@ class MyRobot(MagicRobot):
             self.mode2()
 
     def mode1(self):
-        self.drive()
-        self.armButtons()  # BUTTONS: 2
-        self.hatchButtons()  # BUTTONS: 6 and 4
-        self.cargoButtons()  # BUTTONS: 3 and 5
+        pass
+        # self.drive()
+        # self.armButtons()  # BUTTONS: 2
+        # self.hatchButtons()  # BUTTONS: 6 and 4
+        # self.cargoButtons()  # BUTTONS: 3 and 5
 
     def mode2(self):
-        self.drive()
+        # self.drive()
         self.elevatorButtons()  # BUTTONS: 2, 7, 8, 9, 10, 11, and 12
-        self.shiftButtons()  # BUTTONS: 3 and 5
+        # self.shiftButtons()  # BUTTONS: 3 and 5
 
     def drive(self):
         self.drivetrain.drive(

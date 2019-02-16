@@ -7,13 +7,13 @@ class Shifter:
     shiftSolenoid2: wpilib.Solenoid
 
     def setup(self):
-        self.gear = 0
+        self.gear = False
 
     def upShift(self):
-        self.gear = 1
+        self.gear = True
 
     def downShift(self):
-        self.gear = 0
+        self.gear = False
 
     def execute(self):
         self.shiftSolenoid1.set(self.gear)

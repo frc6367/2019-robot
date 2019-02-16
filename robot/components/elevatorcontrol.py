@@ -39,7 +39,7 @@ class ElevatorControl:
 
     def execute(self):
         # acquire button input and assign state.
-        print(self.state)
+        print("State: ", self.state)
         # state machine based on button input
         if self.state == 1:  # first hatch
             self.elevator_position_hatch1()

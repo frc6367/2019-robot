@@ -63,9 +63,8 @@ class Elevator:
 
     ## Set a target position
     def set_target(self, pos):
-        print(pos)
         self.target1 = pos
-        print(self.target1)
+        print("Target: ",self.target1)
 
     ## STOP
     def stop(self):
@@ -73,6 +72,6 @@ class Elevator:
 
     ## Incremental up and down
     def execute(self):
-        print(self.target1)
+        print("Target Execute: ", self.target1)
         self.motor1.set(ctre.WPI_TalonSRX.ControlMode.MotionMagic, self.target1)
 
