@@ -67,15 +67,15 @@ class MyRobot(MagicRobot):
 
     def mode1(self):
         pass
-        # self.drive()
-        # self.armButtons()  # BUTTONS: 2
-        # self.hatchButtons()  # BUTTONS: 6 and 4
-        # self.cargoButtons()  # BUTTONS: 3 and 5
+        self.drive()
+        self.armButtons()  # BUTTONS: 2
+        self.hatchButtons()  # BUTTONS: 6 and 4
+        self.cargoButtons()  # BUTTONS: 3 and 5
 
     def mode2(self):
-        # self.drive()
-        self.elevatorButtons()  # BUTTONS: 2, 7, 8, 9, 10, 11, and 12
-        # self.shiftButtons()  # BUTTONS: 3 and 5
+        self.drive()
+        self.elevatorButtons()  # BUTTONS: 7,9,5,8,10,6
+        # self.shiftButtons()  # BUTTONS: 3 and 4
 
     def drive(self):
         self.drivetrain.drive(
@@ -97,13 +97,13 @@ class MyRobot(MagicRobot):
             self.elevatorControl.setLevel(2)
         elif self.joystick.getRawButton(9):
             self.elevatorControl.setLevel(4)
-        elif self.joystick.getRawButton(11):
+        elif self.joystick.getRawButton(5):
             self.elevatorControl.setLevel(6)
         elif self.joystick.getRawButton(8):
             self.elevatorControl.setLevel(1)
-        elif self.joystick.getRawButton(11):
+        elif self.joystick.getRawButton(10):
             self.elevatorControl.setLevel(3)
-        elif self.joystick.getRawButton(12):
+        elif self.joystick.getRawButton(6):
             self.elevatorControl.setLevel(5)
 
     def armButtons(self):
@@ -125,7 +125,7 @@ class MyRobot(MagicRobot):
     def shiftButtons(self):
         if self.joystick.getRawButton(3):
             self.shifter.downShift()
-        elif self.joystick.getRawButton(5):
+        elif self.joystick.getRawButton(4):
             self.shifter.upShift()
 
 
