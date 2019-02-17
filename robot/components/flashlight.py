@@ -8,16 +8,16 @@ class limelight:
 
     def setup(self):
         self.table = NetworkTables.getTable("limelight")
-        self.tx = self.table.getNumber("tx", 0)
         self.kP = 0.1
         self.minCommand = 0.05
 
     def autoAlign(self):
-        if self.table.getTable("tv") != 0:
-            if self.tx > 1:
-                self.drivetrain.autoAlign(self.tx * self.kP - self.minCommand)
-            elif self.tx < 1:
-                self.drivetrain.autoAlign(self.tx * self.kP + self.minCommand)
+        tx = self.table.getNumber("tx", 0)
+        if self.table.getNumber("tv", 0) != 0:
+            if tx > 1:
+                self.drivetrain.autoAlign(tx * self.kP - self.minCommand)
+            elif tx < 1:
+                self.drivetrain.autoAlign(tx * self.kP + self.minCommand)
 
     def execute(self):
         pass

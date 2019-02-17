@@ -6,6 +6,8 @@ import rev
 from magicbot import MagicRobot
 from networktables import NetworkTables
 
+
+
 from components.flashdrive import Drivetrain
 from components.elevator import Elevator
 from components.elevatorcontrol import ElevatorControl
@@ -13,7 +15,7 @@ from components.arm import Arm
 from components.hatch import Hatchintake
 from components.cargo import Cargo
 from components.shifter import Shifter
-
+from components.ledstrip import Ledstrip
 from components.flashlight import limelight
 
 
@@ -30,6 +32,7 @@ class MyRobot(MagicRobot):
     hatch: Hatchintake
     cargo: Cargo
     flashlight: limelight
+    ledstrip: Ledstrip
 
     def createObjects(self):
         """Initialize all wpilib motors & sensors"""
@@ -52,7 +55,7 @@ class MyRobot(MagicRobot):
 
         self.shiftSolenoid1 = wpilib.DoubleSolenoid(0, 1)
         self.shiftSolenoid2 = wpilib.DoubleSolenoid(2, 3)
-
+        self.blinkin = wpilib.Spark(1)
         self.gear = 1
         # self.driveMode = True
 
@@ -68,7 +71,10 @@ class MyRobot(MagicRobot):
         self.elevatorButtons()  # LEFT BUTTONS: 1 AND 7 - 12
         self.shiftButtons()  # RIGHT BUTTONS: 1
         self.autoAlign()
-
+        self.ledButtons()
+    def ledButtons(self):
+        if self.joystickR.getRawButton(7):
+            self.ledstrip.setMode(.97)
     def autoAlign(self):
         if self.joystickR.getRawButton(2):
             self.flashlight.autoAlign()
