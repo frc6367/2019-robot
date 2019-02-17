@@ -7,7 +7,6 @@ from magicbot import MagicRobot
 from networktables import NetworkTables
 
 
-
 from components.flashdrive import Drivetrain
 from components.elevator import Elevator
 from components.elevatorcontrol import ElevatorControl
@@ -72,9 +71,11 @@ class MyRobot(MagicRobot):
         self.shiftButtons()  # RIGHT BUTTONS: 1
         self.autoAlign()
         self.ledButtons()
+
     def ledButtons(self):
         if self.joystickR.getRawButton(7):
-            self.ledstrip.setMode(.97)
+            self.ledstrip.setMode(0.97)
+
     def autoAlign(self):
         if self.joystickR.getRawButton(2):
             self.flashlight.autoAlign()
@@ -118,11 +119,11 @@ class MyRobot(MagicRobot):
 
     def hatchButtons(self):
         if self.joystickL.getRawButton(6):
-            self.hatch.move(1)
+            self.hatch.lock()
         elif self.joystickL.getRawButton(4):
-            self.hatch.move(-1)
-        else:
-            self.hatch.move(0)
+            self.hatch.unlock()
+        # else:
+        #     self.hatch.move(0)
 
     def shiftButtons(self):
         if self.joystickR.getRawButtonPressed(1):

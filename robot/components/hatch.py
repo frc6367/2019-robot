@@ -1,16 +1,26 @@
 import ctre
+from magicbot import StateMachine, default_state, timed_state
 
 
-class Hatchintake:
+class Hatchintake(StateMachine):
 
     hatch_intake_motor: ctre.WPI_TalonSRX
 
-    def setup(self):
-        self.speed = 0
+    def unlock(self):
+        self.engage("do_unlock", True)
 
-    def move(self, speed):
-        self.speed = speed
+    def lock(self):
+        self.engage("do_lock", True)
 
-    def execute(self):
-        self.hatch_intake_motor.set(self.speed)
+    @timed_state(duration=2.0, must_finish=True)
+    def do_unlock(self):
+        self.hatch_intake_motor.set(1)
+
+    @timed_state(duration=2.0, must_finish=True, first=True)
+    def do_lock(self):
+        self.hatch_intake_motor.set(-1)
+
+    @default_state()
+    def stop(self):
+        self.hatch_intake_motor.set(0)
 
