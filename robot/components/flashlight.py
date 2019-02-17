@@ -1,20 +1,24 @@
-float Kp = -0.1f;
-float min_command = 0.05f;
+from networktables import NetworkTables
+from components.flashdrive import Drivetrain
 
-std::shared_ptr<NetworkTable> table = NetworkTable::GetTable("limelight");
-float tx = table->GetNumber("tx");
 
-if (joystick->GetRawButton(9))
-{
-        float heading_error = -tx;
-        float steering_adjust = 0.0f;
-        if (tx > 1.0)
-        {
-                steering_adjust = Kp*heading_error - min_command;
-        }
-        else if (tx < 1.0)
-        {
-                steering_adjust = Kp*heading_error + min_command;
-        }
-        left_command += steering_adjust;
-        right_command -= steering_adjust;
+class limelight:
+
+    drivetrain: Drivetrain
+
+    def setup(self):
+        self.table = NetworkTables.getTable("limelight")
+        self.tx = self.table.getNumber("tx", 0)
+        self.kP = 0.1
+        self.minCommand = 0.05
+
+    def autoAlign(self):
+        if self.table.getTable("tv") != 0:
+            if self.tx > 1:
+                self.drivetrain.autoAlign(self.tx * self.kP - self.minCommand)
+            elif self.tx < 1:
+                self.drivetrain.autoAlign(self.tx * self.kP + self.minCommand)
+
+    def execute(self):
+        pass
+

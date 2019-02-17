@@ -1,14 +1,17 @@
 import wpilib
 import ctre
 from components.elevator import Elevator
+from components.arm import Arm
 
 
 class ElevatorControl:
 
     elevator: Elevator
+    arm: Arm
 
     def setup(self):
         self.state = 0
+        self.armState = 0
 
     def elevator_position_ground(self):
         # ground is always 0
@@ -23,6 +26,7 @@ class ElevatorControl:
 
     def elevator_position_cargo3(self):
         self.elevator.set_target(8000)
+        self.arm_position_up()
 
     def elevator_position_hatch1(self):
         self.elevator.set_target(1500)
@@ -33,8 +37,17 @@ class ElevatorControl:
     def elevator_position_hatch3(self):
         self.elevator.set_target(7500)
 
+    def arm_position_down(self):
+        self.arm.setPos(1)
+
+    def arm_position_up(self):
+        self.arm.setPos(1)
+
+    def setArmPos(self, pos):
+        self.armState = pos
+
     def setLevel(self, state):
-        self.state = state
+        self.armState = state
 
     def execute(self):
         # acquire button input and assign state.
@@ -53,4 +66,8 @@ class ElevatorControl:
             self.elevator_position_cargo3()
         elif self.state == 0:  # ground
             self.elevator_position_ground()
+        if self.armState == 0:
+            self.arm_position_down()
+        elif self.armState == 1:
+            self.arm_position_up()
 
