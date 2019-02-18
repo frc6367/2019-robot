@@ -73,6 +73,7 @@ class MyRobot(MagicRobot):
         self.shiftButtons()  # RIGHT BUTTONS: 1
         self.autoAlign()
         self.ledButtons()
+
     def ledButtons(self):
         if self.joystickR.getRawButton(7):
             self.ledstrip.setMode(-.97)
@@ -127,11 +128,11 @@ class MyRobot(MagicRobot):
 
     def hatchButtons(self):
         if self.joystickL.getRawButton(6):
-            self.hatch.move(1)
+            self.hatch.lock()
         elif self.joystickL.getRawButton(4):
-            self.hatch.move(-1)
-        else:
-            self.hatch.move(0)
+            self.hatch.unlock()
+        # else:
+        #     self.hatch.move(0)
 
     def shiftButtons(self):
         if self.joystickR.getRawButtonPressed(1):
