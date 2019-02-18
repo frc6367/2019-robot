@@ -7,7 +7,7 @@ from components.arm import Arm
 class ElevatorControl:
 
     elevator: Elevator
-    arm: Arm
+    # arm: Arm
 
     def setup(self):
         self.state = 0
@@ -38,16 +38,20 @@ class ElevatorControl:
         self.elevator.set_target(7500)
 
     def arm_position_down(self):
-        self.arm.setPos(1)
+        # self.arm.setPos(1)
+        pass
 
     def arm_position_up(self):
-        self.arm.setPos(1)
+        # self.arm.setPos(1)
+        pass
 
     def setArmPos(self, pos):
-        self.armState = pos
+        # self.armState = pos
+        pass
 
     def setLevel(self, state):
-        self.armState = state
+        # self.armState = state
+        pass
 
     def execute(self):
         # acquire button input and assign state.

@@ -8,10 +8,11 @@ from networktables import NetworkTables
 
 
 
+from robotpy_ext.common_drivers.distance_sensors import SharpIR2Y0A21
 from components.flashdrive import Drivetrain
 from components.elevator import Elevator
 from components.elevatorcontrol import ElevatorControl
-from components.arm import Arm
+# from components.arm import Arm230.0
 from components.hatch import Hatchintake
 from components.cargo import Cargo
 from components.shifter import Shifter
@@ -28,7 +29,7 @@ class MyRobot(MagicRobot):
     elevatorControl: ElevatorControl
     drivetrain: Drivetrain
     elevator: Elevator
-    arm: Arm
+    # arm: Arm
     hatch: Hatchintake
     cargo: Cargo
     flashlight: limelight
@@ -48,15 +49,15 @@ class MyRobot(MagicRobot):
 
         self.elevator_motor1 = ctre.WPI_TalonSRX(7)
 
-        self.arm_motor = rev.CANSparkMax(9, rev.MotorType.kBrushless)
+        # self.arm_motor = rev.CANSparkMax(9, rev.MotorType.kBrushless)
         self.cargo_intake_motor = ctre.WPI_TalonSRX(8)
         self.hatch_intake_motor = ctre.WPI_TalonSRX(9)
-        self.testMotor = ctre.WPI_TalonSRX(12)
 
         self.shiftSolenoid1 = wpilib.DoubleSolenoid(0, 1)
         self.shiftSolenoid2 = wpilib.DoubleSolenoid(2, 3)
         self.blinkin = wpilib.Spark(1)
         self.gear = 1
+        self.irSensor = SharpIR2Y0A21(0)
         # self.driveMode = True
 
     def teleopPeriodic(self):
@@ -64,7 +65,7 @@ class MyRobot(MagicRobot):
            actions"""
         # self.mode()
         self.drive()
-        self.armButtons()  # LEFT BUTTONS: 2
+        # self.armButtons()  # LEFT BUTTONS: 2
         self.hatchButtons()  # LEFT BUTTONS: 6 and 4
         self.cargoButtons()  # LEFT BUTTONS: 3 and 5
         self.drive()  # RIGHT JOYSTICK
@@ -74,10 +75,18 @@ class MyRobot(MagicRobot):
         self.ledButtons()
     def ledButtons(self):
         if self.joystickR.getRawButton(7):
-            self.ledstrip.setMode(.97)
+            self.ledstrip.setMode(-.97)
     def autoAlign(self):
-        if self.joystickR.getRawButton(2):
-            self.flashlight.autoAlign()
+        if self.flashlight.autoCheck():
+            self.ledstrip.setMode(.67)
+            if self.joystickR.getRawButton(2):
+                self.flashlight.autoAlign()
+                if not self.flashlight.absdistCheck():
+                    self.ledstrip.setMode(.77)
+                else:
+                    self.ledstrip.setMode(0.27)
+        else:
+            self.ledstrip.setMode(.61)
 
     def drive(self):
         self.drivetrain.drive(
@@ -86,11 +95,11 @@ class MyRobot(MagicRobot):
 
     def cargoButtons(self):
         if self.joystickL.getRawButton(5):
-            self.cargo.setSpeed(1)
-        elif self.joystickL.getRawButton(3):
-            self.cargo.setSpeed(-1)
+            self.cargo.forward()
+        elif self.joystickL.getRawButton(3) or self.cargo.inRange():
+            self.cargo.reverse()
         else:
-            self.cargo.setSpeed(0)
+            self.cargo.off()
 
     def elevatorButtons(self):
         if self.joystickL.getRawButton(1):
