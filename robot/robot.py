@@ -47,6 +47,7 @@ class MyRobot(MagicRobot):
         self.drive_r2 = ctre.VictorSPX(5)
         self.drive_r3 = ctre.VictorSPX(6)
 
+
         self.elevator_motor1 = ctre.WPI_TalonSRX(7)
 
         # self.arm_motor = rev.CANSparkMax(9, rev.MotorType.kBrushless)
@@ -54,7 +55,7 @@ class MyRobot(MagicRobot):
         self.hatch_intake_motor = ctre.WPI_TalonSRX(9)
 
         self.shiftSolenoid1 = wpilib.DoubleSolenoid(0, 1)
-        self.shiftSolenoid2 = wpilib.DoubleSolenoid(2, 3)
+        self.shiftSolenoid2 = wpilib.DoubleSolenoid(3, 2)
         self.blinkin = wpilib.Spark(1)
         self.gear = 1
         self.irSensor = SharpIR2Y0A21(0)
@@ -63,12 +64,10 @@ class MyRobot(MagicRobot):
     def teleopPeriodic(self):
         """Place code here that does things as a result of operator
            actions"""
-        # self.mode()
         self.drive()
-        # self.armButtons()  # LEFT BUTTONS: 2
+        self.armButtons()  # LEFT BUTTONS: 2
         self.hatchButtons()  # LEFT BUTTONS: 6 and 4
-        self.cargoButtons()  # LEFT BUTTONS: 3 and 5
-        self.drive()  # RIGHT JOYSTICK
+        self.cargoButtons()  # LEFT BUTTONS: 3 and 5b
         self.elevatorButtons()  # LEFT BUTTONS: 1 AND 7 - 12
         self.shiftButtons()  # RIGHT BUTTONS: 1
         self.autoAlign()
@@ -91,8 +90,9 @@ class MyRobot(MagicRobot):
 
     def drive(self):
         self.drivetrain.drive(
-            -self.joystickR.getY() * 0.75, self.joystickR.getX() * 0.5
+            self.joystickR.getY(), -self.joystickR.getZ()
         )
+
 
     def cargoButtons(self):
         if self.joystickL.getRawButton(5):

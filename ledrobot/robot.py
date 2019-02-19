@@ -1,60 +1,62 @@
 import wpilib
 import random
 import rev
-from robotpy_ext.common_drivers.distance_sensors import SharpIR2Y0A21
-from magicbot import MagicRobot, tunable
+import ctre
+import wpilib.drive
+import magicbot
+from magicbot import MagicRobot
 
-class CargoAutomaion:
-    sensor: SharpIR2Y0A21
 
-    def setup(self):
-        self.kMin = 1
-        self.kMax = 4
+class Drivetrain:
 
-    def toInches(self, cm):
-        return cm * 0.393701
+    drive_l1: ctre.WPI_TalonSRX
+    drive_l2: ctre.VictorSPX
+    drive_l3: ctre.VictorSPX
+    drive_r1: ctre.WPI_TalonSRX
+    drive_r2: ctre.VictorSPX
+    drive_r3: ctre.VictorSPX
 
-    def inRange(self):
-        dist = self.toInches(self.sensor.getDistance())
-        if dist <= self.kMax and dist >= self.kMin:
-            return True
-        
-    def execute(self):
-        pass
-
-class Ledstrip:
-
-    blinkin: wpilib.Spark
-
-    powerOut = tunable(0)
+    speed = magicbot.will_reset_to(0)
+    rotation = magicbot.will_reset_to(0)
 
     def setup(self):
-        # self.blinkin.setBounds(2000,1500,1500,1500,1000)
-        pass
-    
-    def setMode(self, powerOut):
-        self.powerOut = powerOut
+        self.drive_l2.follow(self.drive_l1)
+        self.drive_l3.follow(self.drive_l1)
+        self.drive_r2.follow(self.drive_r1)
+        self.drive_r3.follow(self.drive_r1)
+        self.ddrive = wpilib.drive.DifferentialDrive(self.drive_l1, self.drive_r1)
+
+    # def on_enable(self):
+    #     self.x = 0
+    #     self.y = 0
+
+    def drive(self, speed, rotation):
+        self.speed = -speed
+        self.rotation = -rotation
 
     def execute(self):
-        self.blinkin.set(self.powerOut)
+        self.ddrive.arcadeDrive(-self.speed, -self.rotation)
 
 class MyRobot(MagicRobot):
 
-    ledstrip: Ledstrip
-    cargoauto: CargoAutomaion
+    drivetrain: Drivetrain
+
     def createObjects(self):
-        self.blinkin = wpilib.Spark(1)
-        self.stick = wpilib.Joystick(0)
-        self.sensor = SharpIR2Y0A21(1)
+        self.joystickR = wpilib.Joystick(0)
+        self.drive_l1 = ctre.WPI_TalonSRX(1)
+        self.drive_l2 = ctre.VictorSPX(2)
+        self.drive_l3 = ctre.VictorSPX(3)
+        self.drive_r1 = ctre.WPI_TalonSRX(4)
+        self.drive_r2 = ctre.VictorSPX(5)
+        self.drive_r3 = ctre.VictorSPX(6)
 
     def teleopPeriodic(self):
-        self.cargoButtons()
-        if self.stick.getRawButtonReleased(1):
-            self.ledstrip.setMode((random.random() * 2) - 1)
+        self.drivetrain.drive(
+            -self.joystickR.getY() * 0.75, self.joystickR.getX()
+            
+        )
+
     
-    def cargoButtons(self):
-        if self.cargoauto.inRange():
-            self.ledstrip.setMode((random.random() * 2) - 1)
 
 if __name__ == "__main__":
     wpilib.run(MyRobot)

@@ -20,6 +20,8 @@ class Drivetrain:
         self.drive_l3.follow(self.drive_l1)
         self.drive_r2.follow(self.drive_r1)
         self.drive_r3.follow(self.drive_r1)
+        self.drive_l1.setNeutralMode(self.drive_l1.NeutralMode.Brake)
+        self.drive_r1.setNeutralMode(self.drive_r1.NeutralMode.Brake)
         self.ddrive = wpilib.drive.DifferentialDrive(self.drive_l1, self.drive_r1)
 
     # def on_enable(self):
