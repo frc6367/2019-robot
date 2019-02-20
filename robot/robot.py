@@ -7,12 +7,12 @@ from magicbot import MagicRobot
 from networktables import NetworkTables
 
 
-
 from robotpy_ext.common_drivers.distance_sensors import SharpIR2Y0A21
 from components.flashdrive import Drivetrain
 from components.elevator import Elevator
 from components.elevatorcontrol import ElevatorControl
-# from components.arm import Arm230.0
+
+from components.arm import Arm
 from components.hatch import Hatchintake
 from components.cargo import Cargo
 from components.shifter import Shifter
@@ -29,16 +29,33 @@ class MyRobot(MagicRobot):
     elevatorControl: ElevatorControl
     drivetrain: Drivetrain
     elevator: Elevator
-    # arm: Arm
+    arm: Arm
     hatch: Hatchintake
     cargo: Cargo
     flashlight: limelight
     ledstrip: Ledstrip
 
+    CARGO_INTAKE = 1
+    CARGO_SHOOT = 2
+
+    HATCH_CLOSED = 3
+    HATCH_OPEN = 4
+    HATCH_STOWED = 6
+
+    CARGO_GROUND = 5
+
+    CARGO_LOW = 12
+    CARGO_MIDDLE = 10
+    CARGO_HIGH = 8
+
+    HATCH_LOW = 11
+    HATCH_MIDDLE = 9
+    HATCH_HIGH = 7
+
     def createObjects(self):
         """Initialize all wpilib motors & sensors"""
-        self.joystickR = wpilib.Joystick(0)
-        self.joystickL = wpilib.Joystick(1)
+        self.mainStick = wpilib.Joystick(0)
+        self.extraStick = wpilib.Joystick(1)
         self.armUp = False
         self.drive_l1 = ctre.WPI_TalonSRX(1)
         self.drive_l2 = ctre.VictorSPX(2)
@@ -47,12 +64,11 @@ class MyRobot(MagicRobot):
         self.drive_r2 = ctre.VictorSPX(5)
         self.drive_r3 = ctre.VictorSPX(6)
 
-
         self.elevator_motor1 = ctre.WPI_TalonSRX(7)
 
-        # self.arm_motor = rev.CANSparkMax(9, rev.MotorType.kBrushless)
-        self.cargo_intake_motor = ctre.WPI_TalonSRX(8)
-        self.hatch_intake_motor = ctre.WPI_TalonSRX(9)
+        self.arm_motor = rev.CANSparkMax(9, rev.MotorType.kBrushless)
+        self.cargo_intake_motor = ctre.WPI_VictorSPX(10)
+        self.hatch_intake_motor = ctre.WPI_TalonSRX(8)
 
         self.shiftSolenoid1 = wpilib.DoubleSolenoid(0, 1)
         self.shiftSolenoid2 = wpilib.DoubleSolenoid(3, 2)
@@ -74,68 +90,68 @@ class MyRobot(MagicRobot):
         self.ledButtons()
 
     def ledButtons(self):
-        if self.joystickR.getRawButton(7):
-            self.ledstrip.setMode(-.97)
+        # if self.mainStick.getRawButton(7):
+        #    self.ledstrip.setMode(-0.97)
+        pass
+
     def autoAlign(self):
-        if self.flashlight.autoCheck():
-            self.ledstrip.setMode(.67)
-            if self.joystickR.getRawButton(2):
-                self.flashlight.autoAlign()
-                if not self.flashlight.absdistCheck():
-                    self.ledstrip.setMode(.77)
-                else:
-                    self.ledstrip.setMode(0.27)
-        else:
-            self.ledstrip.setMode(.61)
+        pass
+        # if self.flashlight.autoCheck():
+        #     self.ledstrip.setMode(0.67)
+        #     if self.mainStick.getRawButton(2):
+        #         self.flashlight.autoAlign()
+        #         if not self.flashlight.absdistCheck():
+        #             self.ledstrip.setMode(0.77)
+        #         else:
+        #             self.ledstrip.setMode(0.27)
+        # else:
+        #     self.ledstrip.setMode(0.61)
 
     def drive(self):
-        self.drivetrain.drive(
-            self.joystickR.getY(), -self.joystickR.getZ()
-        )
-
+        self.drivetrain.drive(self.mainStick.getY(), -self.mainStick.getZ())
 
     def cargoButtons(self):
-        if self.joystickL.getRawButton(5):
-            self.cargo.forward()
-        elif self.joystickL.getRawButton(3) or self.cargo.inRange():
-            self.cargo.reverse()
+        if self.mainStick.getRawButton(self.CARGO_INTAKE):
+            self.cargo.intake()
+        elif self.mainStick.getRawButton(self.CARGO_SHOOT):  # or self.cargo.inRange():
+            self.cargo.shoot()
         else:
             self.cargo.off()
 
     def elevatorButtons(self):
-        if self.joystickL.getRawButton(1):
-            self.elevatorControl.setLevel(0)
-        elif self.joystickL.getRawButton(7):
-            self.elevatorControl.setLevel(2)
-        elif self.joystickL.getRawButton(9):
-            self.elevatorControl.setLevel(4)
-        elif self.joystickL.getRawButton(11):
-            self.elevatorControl.setLevel(6)
-        elif self.joystickL.getRawButton(8):
-            self.elevatorControl.setLevel(1)
-        elif self.joystickL.getRawButton(10):
-            self.elevatorControl.setLevel(3)
-        elif self.joystickL.getRawButton(12):
-            self.elevatorControl.setLevel(5)
+        if self.mainStick.getRawButton(self.CARGO_GROUND):
+            self.elevatorControl.elevator_position_cargo_ground()
+        elif self.mainStick.getRawButton(self.CARGO_LOW):
+            self.elevatorControl.elevator_position_cargo1()
+        elif self.mainStick.getRawButton(self.CARGO_MIDDLE):
+            self.elevatorControl.elevator_position_cargo2()
+        elif self.mainStick.getRawButton(self.CARGO_HIGH):
+            self.elevatorControl.elevator_position_cargo3()
+        elif self.mainStick.getRawButton(self.HATCH_LOW):
+            self.elevatorControl.elevator_position_hatch1()
+        elif self.mainStick.getRawButton(self.HATCH_MIDDLE):
+            self.elevatorControl.elevator_position_hatch2()
+        elif self.mainStick.getRawButton(self.HATCH_HIGH):
+            self.elevatorControl.elevator_position_hatch3()
 
     def armButtons(self):
-        if self.joystickL.getRawButtonReleased(2):
-            self.armUp = not self.armUp
-            if self.armUp:
-                self.elevatorControl.setArmPos(100)
-            else:
-                self.elevatorControl.setArmPos(0)
+        pass
+        # if self.mainStick.getRawButtonReleased(2):
+        #     self.armUp = not self.armUp
+        #     if self.armUp:
+        #         self.elevatorControl.setArmPos(100)
+        #     else:
+        #         self.elevatorControl.setArmPos(0)
 
     def hatchButtons(self):
-        if self.joystickL.getRawButton(6):
+        if self.mainStick.getRawButton(self.HATCH_LOW):
             self.hatch.lock()
-        elif self.joystickL.getRawButton(4):
+        elif self.mainStick.getRawButton(self.HATCH_HIGH):
             self.hatch.unlock()
-        # else:
-        #     self.hatch.move(0)
+        # TODO: HATCH_MIDDLE
 
     def shiftButtons(self):
-        if self.joystickR.getRawButtonPressed(1):
+        if self.extraStick.getRawButtonPressed(1):
             self.shifter.turnOn()
             if self.gear == 1:
                 self.gear = 2
@@ -144,7 +160,7 @@ class MyRobot(MagicRobot):
                 self.gear = 1
                 self.shifter.downShift()
 
-        if self.joystickR.getRawButtonReleased(1):
+        if self.extraStick.getRawButtonReleased(1):
             self.shifter.turnOff()
 
 

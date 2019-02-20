@@ -1,9 +1,12 @@
 import ctre
 
+from magicbot import tunable
+
 
 class Elevator:
 
     motor1: ctre.WPI_TalonSRX
+    target1 = tunable(0)
 
     def setup(self):
 
@@ -11,7 +14,6 @@ class Elevator:
         self.kSlotIdx = 0
         self.kPIDLoopIdx = 0
         self.kTimeoutMs = 10
-        self.target1 = 0
 
         # setup information for motion magic
 
@@ -20,12 +22,12 @@ class Elevator:
 
         # first choose the sensor
         self.motor1.configSelectedFeedbackSensor(
-            ctre.WPI_TalonSRX.FeedbackDevice.CTRE_MagEncoder_Relative,
+            ctre.WPI_TalonSRX.FeedbackDevice.QuadEncoder,
             self.kPIDLoopIdx,
             self.kTimeoutMs,
         )
-        self.motor1.setSensorPhase(True)
-        self.motor1.setInverted(False)
+        self.motor1.setSensorPhase(False)
+        self.motor1.setInverted(True)
 
         # Set relevant frame periods to be at least as fast as periodic rate
         self.motor1.setStatusFramePeriod(
@@ -47,13 +49,14 @@ class Elevator:
 
         # set closed loop gains in slot0 - see documentation */
         self.motor1.selectProfileSlot(self.kSlotIdx, self.kPIDLoopIdx)
-        self.motor1.config_kF(0, 0.2, self.kTimeoutMs)
-        self.motor1.config_kP(0, 0.2, self.kTimeoutMs)
+        self.motor1.config_kF(0, 1.705, self.kTimeoutMs)
+        self.motor1.config_kP(0, 1.0, self.kTimeoutMs)
         self.motor1.config_kI(0, 0, self.kTimeoutMs)
-        self.motor1.config_kD(0, 0, self.kTimeoutMs)
+        self.motor1.config_kD(0, 5.0, self.kTimeoutMs)
         # set acceleration and vcruise velocity - see documentation
-        self.motor1.configMotionCruiseVelocity(15000, self.kTimeoutMs)
-        self.motor1.configMotionAcceleration(6000, self.kTimeoutMs)
+        # -> measured max velocity at 600
+        self.motor1.configMotionCruiseVelocity(300, self.kTimeoutMs)
+        self.motor1.configMotionAcceleration(800, self.kTimeoutMs)
         # zero the sensor
         self.motor1.setSelectedSensorPosition(0, self.kPIDLoopIdx, self.kTimeoutMs)
 
