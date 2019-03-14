@@ -10,6 +10,8 @@ class Shifter:
         self.gear = False
         self.on = False
 
+        self.lastSolValue = wpilib.DoubleSolenoid.Value.kOff
+
     def upShift(self):
         self.gear = True
 
@@ -23,12 +25,17 @@ class Shifter:
         self.on = False
 
     def execute(self):
+        # apparently solenoids are really slow, only set them when the
+        # value changes!
+
         if self.gear and self.on:
-            self.shiftSolenoid1.set(wpilib.DoubleSolenoid.Value.kForward)
-            self.shiftSolenoid2.set(wpilib.DoubleSolenoid.Value.kForward)
+            solValue = wpilib.DoubleSolenoid.Value.kForward
         elif not self.gear and self.on:
-            self.shiftSolenoid1.set(wpilib.DoubleSolenoid.Value.kReverse)
-            self.shiftSolenoid2.set(wpilib.DoubleSolenoid.Value.kReverse)
+            solValue = wpilib.DoubleSolenoid.Value.kReverse
         else:
-            self.shiftSolenoid1.set(wpilib.DoubleSolenoid.Value.kOff)
-            self.shiftSolenoid2.set(wpilib.DoubleSolenoid.Value.kOff)
+            solValue = wpilib.DoubleSolenoid.Value.kOff
+
+        if solValue != self.lastSolValue:
+            self.lastSolValue = solValue
+            self.shiftSolenoid1.set(solValue)
+            self.shiftSolenoid2.set(solValue)

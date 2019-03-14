@@ -54,6 +54,10 @@ class MyRobot(MagicRobot):
 
     def createObjects(self):
         """Initialize all wpilib motors & sensors"""
+
+        # LiveWindow slows down the robot, and we aren't using it
+        wpilib.LiveWindow.disableAllTelemetry()
+
         self.mainStick = wpilib.Joystick(0)
         self.extraStick = wpilib.Joystick(1)
         self.armUp = False
