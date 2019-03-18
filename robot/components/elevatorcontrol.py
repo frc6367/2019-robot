@@ -20,7 +20,7 @@ class ElevatorControl:
 
     low = tunable(10)
     middle = tunable(26)
-    top = tunable(40)
+    top = tunable(35)
 
     def setup(self):
         self.state = 0
@@ -45,7 +45,7 @@ class ElevatorControl:
 
     def elevator_position_cargo3(self):
         self.elevator.set_target(self.top * self.kEncoderPerInch)
-        self.arm.setMiddle()
+        self.arm.setMiddleTop()
 
     def elevator_position_hatch1(self):
         self.elevator.set_target(self.low * self.kEncoderPerInch)

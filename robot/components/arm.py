@@ -9,12 +9,13 @@ class Arm:
     arm_motor: rev.CANSparkMax
 
     top = tunable(0)
-    middle = tunable(-4.5)
-    bottom = tunable(-8.0)
+    middle = tunable(-8.8)
+    bottom = tunable(-15.0)
+    middle_top = tunable(-7.0)
 
     def setup(self):
         self.target = None
-
+        self.arm_motor.setIdleMode(rev.IdleMode.kBrake)
         self.arm_motor.restoreFactoryDefaults()
         self.arm_pidController = self.arm_motor.getPIDController()
         self.arm_encoder = self.arm_motor.getEncoder()
@@ -41,6 +42,9 @@ class Arm:
 
     def setMiddle(self):
         self.target = self.middle
+
+    def setMiddleTop(self):
+        self.target = self.middle_top
 
     def setBottom(self):
         self.target = self.bottom
