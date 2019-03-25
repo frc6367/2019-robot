@@ -22,6 +22,8 @@ from components.flashlight import limelight
 
 class MyRobot(MagicRobot):
 
+    use_teleop_in_autonomous = True
+
     #
     # Define components here
     #
@@ -54,7 +56,7 @@ class MyRobot(MagicRobot):
 
     def createObjects(self):
         """Initialize all wpilib motors & sensors"""
-
+        wpilib.CameraServer.launch()
         # LiveWindow slows down the robot, and we aren't using it
         wpilib.LiveWindow.disableAllTelemetry()
 
@@ -85,7 +87,6 @@ class MyRobot(MagicRobot):
         """Place code here that does things as a result of operator
            actions"""
         self.drive()
-        self.armButtons()  # LEFT BUTTONS: 2
         self.hatchButtons()  # LEFT BUTTONS: 6 and 4
         self.cargoButtons()  # LEFT BUTTONS: 3 and 5b
         self.elevatorButtons()  # LEFT BUTTONS: 1 AND 7 - 12
@@ -137,22 +138,16 @@ class MyRobot(MagicRobot):
             self.elevatorControl.elevator_position_hatch2()
         elif self.mainStick.getRawButton(self.HATCH_HIGH):
             self.elevatorControl.elevator_position_hatch3()
-
-    def armButtons(self):
-        pass
-        # if self.mainStick.getRawButtonReleased(2):
-        #     self.armUp = not self.armUp
-        #     if self.armUp:
-        #         self.elevatorControl.setArmPos(100)
-        #     else:
-        #         self.elevatorControl.setArmPos(0)
+        elif self.extraStick.getRawButton(5):
+            self.elevatorControl.elevator_position_cargoBay()
 
     def hatchButtons(self):
-        if self.mainStick.getRawButton(self.HATCH_LOW):
+        if self.mainStick.getRawButton(self.HATCH_CLOSED):
             self.hatch.lock()
-        elif self.mainStick.getRawButton(self.HATCH_HIGH):
+        elif self.mainStick.getRawButton(self.HATCH_OPEN):
             self.hatch.unlock()
-        # TODO: HATCH_MIDDLE
+        elif self.mainStick.getRawButton(self.HATCH_STOWED):
+            self.hatch.halfLock()
 
     def shiftButtons(self):
         if self.extraStick.getRawButtonPressed(1):

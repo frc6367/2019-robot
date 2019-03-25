@@ -49,6 +49,9 @@ class Arm:
     def setBottom(self):
         self.target = self.bottom
 
+    def isArmTargetTop(self):
+        return self.target == self.top
+
     ## STOP
     def stop(self):
         self.target = None
