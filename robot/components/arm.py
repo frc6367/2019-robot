@@ -10,7 +10,7 @@ class Arm:
 
     top = tunable(0)
     middle = tunable(-8.8)
-    bottom = tunable(-15.0)
+    bottom = tunable(-14.0)
     middle_top = tunable(-7.0)
 
     def setup(self):
@@ -51,6 +51,9 @@ class Arm:
 
     def isArmTargetTop(self):
         return self.target == self.top
+    
+    def isArmTargetBottom(self):
+        return self.target == self.bottom
 
     ## STOP
     def stop(self):

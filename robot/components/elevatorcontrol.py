@@ -91,6 +91,9 @@ class ElevatorControl:
         self.arm.setBottom()
         self.hatch.unlock()
         self.touchButtonCargoHab = False
+    
+    def isElevatorGround(self):
+        return self.elevator.target1 == 0
 
     def execute(self):
         pass

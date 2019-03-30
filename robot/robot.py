@@ -3,10 +3,12 @@
 import wpilib
 import ctre
 import rev
+from magicbot import tunable
 from magicbot import MagicRobot
 from networktables import NetworkTables
 
 
+from robotpy_ext.common_drivers.distance_sensors import SharpIR2Y0A21
 from components.flashdrive import Drivetrain
 from components.elevator import Elevator
 from components.elevatorcontrol import ElevatorControl
@@ -18,8 +20,6 @@ from components.shifter import Shifter
 from components.ledstrip import Ledstrip
 from components.flashlight import limelight
 
-from components.joystick import Joystick
-
 class MyRobot(MagicRobot):
 
     use_teleop_in_autonomous = True
@@ -27,7 +27,6 @@ class MyRobot(MagicRobot):
     #
     # Define components here
     #
-    joystick: Joystick
     shifter: Shifter
     elevatorControl: ElevatorControl
     drivetrain: Drivetrain
@@ -46,7 +45,6 @@ class MyRobot(MagicRobot):
     HATCH_STOWED = 6
 
     CARGO_GROUND = 5
-    CARGO_HAB = 5
 
     CARGO_LOW = 12
     CARGO_MIDDLE = 10
@@ -55,6 +53,17 @@ class MyRobot(MagicRobot):
     HATCH_LOW = 11
     HATCH_MIDDLE = 9
     HATCH_HIGH = 7
+
+    s = tunable(0.57)
+    m = tunable(1.340508)
+    t = tunable(0.381021)
+    b = tunable(-0.340508)
+    sTwist = tunable(0.75)
+    mTwist = tunable(1.56538)
+    tTwist = tunable(0.54176)
+    bTwist = tunable(-0.56538)
+    autoEnable = tunable(True)
+
 
     def createObjects(self):
         """Initialize all wpilib motors & sensors"""
@@ -75,13 +84,14 @@ class MyRobot(MagicRobot):
         self.elevator_motor1 = ctre.WPI_TalonSRX(7)
 
         self.arm_motor = rev.CANSparkMax(9, rev.MotorType.kBrushless)
-        self.cargo_intake_motor = ctre.WPI_VictorSPX(10)
+        self.cargo_intake_motor = ctre.WPI_TalonSRX(11)
         self.hatch_intake_motor = ctre.WPI_TalonSRX(8)
 
         self.shiftSolenoid1 = wpilib.DoubleSolenoid(0, 1)
         self.shiftSolenoid2 = wpilib.DoubleSolenoid(3, 2)
         self.blinkin = wpilib.Spark(1)
         self.gear = 1
+        self.irSensor = SharpIR2Y0A21(0)
         # self.driveMode = True
 
     def teleopPeriodic(self):
@@ -114,7 +124,31 @@ class MyRobot(MagicRobot):
         #     self.ledstrip.setMode(0.61)
 
     def drive(self):
-        self.drivetrain.drive(self.joystick.getRawAxis(), -self.joystick.getTwist())
+        self.drivetrain.drive(self.getYAxisDrive(), -self.getTwist())
+
+    def getYAxisDrive(self):
+        y = self.mainStick.getY()
+        scale = 1
+        if y < -self.t:
+            return scale * (self.m * y - self.b)
+    
+        if y > -self.t and y < self.t:
+            return scale * (1 / (pow(self.s,2.0)) * pow(y,3.0))
+        else:
+            return scale * (self.m * y + self.b)
+
+    def getTwist(self):
+        z = self.mainStick.getZ()
+        scale = 1
+
+        if z < -self.tTwist:
+            return scale * (self.mTwist * z - self.bTwist)
+
+        if z > -self.tTwist and z < self.tTwist:
+            return scale * (1 / (pow(self.sTwist,2.0)) * pow(z,3.0))
+        else:
+            return scale * (self.mTwist * z + self.bTwist)
+  
 
     def cargoButtons(self):
         if self.mainStick.getRawButton(self.CARGO_INTAKE):
@@ -133,13 +167,14 @@ class MyRobot(MagicRobot):
             self.elevatorControl.elevator_position_cargo2()
         elif self.mainStick.getRawButton(self.CARGO_HIGH) or self.elevatorControl.touchButtonCargoTop:
             self.elevatorControl.elevator_position_cargo3()
-        elif self.mainStick.getRawButton(self.HATCH_LOW) or self.elevatorControl.touchButtonHatchBottom:
+        elif self.mainStick.getRawButton(self.HATCH_LOW) or self.elevatorControl.touchButtonHatchBottom or \
+            (self.autoEnable and self.cargo.isBallIn() and self.arm.isArmTargetBottom() and self.elevatorControl.isElevatorGround()):
             self.elevatorControl.elevator_position_hatch1()
-        elif self.mainStick.getRawButton(self.HATCH_MIDDLE) or self.elevatorControl.touchButtonCargoMiddle:
+        elif self.mainStick.getRawButton(self.HATCH_MIDDLE) or self.elevatorControl.touchButtonHatchMiddle:
             self.elevatorControl.elevator_position_hatch2()
-        elif self.mainStick.getRawButton(self.HATCH_HIGH) or self.elevatorControl.touchButtonCargoTop:
+        elif self.mainStick.getRawButton(self.HATCH_HIGH) or self.elevatorControl.touchButtonHatchTop:
             self.elevatorControl.elevator_position_hatch3()
-        elif self.extraStick.getRawButton(self.CARGO_HAB) or self.elevatorControl.touchButtonCargoHab:
+        elif self.extraStick.getRawButton(5) or self.elevatorControl.touchButtonCargoHab:
             self.elevatorControl.elevator_position_cargoBay()
 
     def hatchButtons(self):

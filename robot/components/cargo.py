@@ -1,11 +1,15 @@
 import ctre
 
 from magicbot import feedback
-
+from magicbot import feedback, tunable
 
 class Cargo:
 
-    cargo_intake_motor: ctre.WPI_VictorSPX
+    current  = tunable(0)
+    smooth = tunable(0)
+    alpha = tunable(0.92)
+    inThreshold = tunable(11)
+    cargo_intake_motor: ctre.WPI_TalonSRX
 
     def setup(self):
         self.speed = 0
@@ -22,5 +26,10 @@ class Cargo:
     def off(self):
         self.speed = 0
 
+    def isBallIn(self):
+        return self.smooth > self.inThreshold 
+
     def execute(self):
         self.cargo_intake_motor.set(self.speed)
+        self.current = self.cargo_intake_motor.getOutputCurrent()
+        self.smooth = (self.alpha * self.smooth) + (1 - self.alpha) * self.current
