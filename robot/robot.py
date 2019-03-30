@@ -7,7 +7,6 @@ from magicbot import MagicRobot
 from networktables import NetworkTables
 
 
-from robotpy_ext.common_drivers.distance_sensors import SharpIR2Y0A21
 from components.flashdrive import Drivetrain
 from components.elevator import Elevator
 from components.elevatorcontrol import ElevatorControl
@@ -47,6 +46,7 @@ class MyRobot(MagicRobot):
     HATCH_STOWED = 6
 
     CARGO_GROUND = 5
+    CARGO_HAB = 5
 
     CARGO_LOW = 12
     CARGO_MIDDLE = 10
@@ -82,7 +82,6 @@ class MyRobot(MagicRobot):
         self.shiftSolenoid2 = wpilib.DoubleSolenoid(3, 2)
         self.blinkin = wpilib.Spark(1)
         self.gear = 1
-        self.irSensor = SharpIR2Y0A21(0)
         # self.driveMode = True
 
     def teleopPeriodic(self):
@@ -126,21 +125,21 @@ class MyRobot(MagicRobot):
             self.cargo.off()
 
     def elevatorButtons(self):
-        if self.mainStick.getRawButton(self.CARGO_GROUND):
+        if self.mainStick.getRawButton(self.CARGO_GROUND) or self.elevatorControl.touchButtonIntake:
             self.elevatorControl.elevator_position_cargo_ground()
-        elif self.mainStick.getRawButton(self.CARGO_LOW):
+        elif self.mainStick.getRawButton(self.CARGO_LOW) or self.elevatorControl.touchButtonCargoBottom:
             self.elevatorControl.elevator_position_cargo1()
-        elif self.mainStick.getRawButton(self.CARGO_MIDDLE):
+        elif self.mainStick.getRawButton(self.CARGO_MIDDLE) or self.elevatorControl.touchButtonCargoMiddle:
             self.elevatorControl.elevator_position_cargo2()
-        elif self.mainStick.getRawButton(self.CARGO_HIGH):
+        elif self.mainStick.getRawButton(self.CARGO_HIGH) or self.elevatorControl.touchButtonCargoTop:
             self.elevatorControl.elevator_position_cargo3()
-        elif self.mainStick.getRawButton(self.HATCH_LOW):
+        elif self.mainStick.getRawButton(self.HATCH_LOW) or self.elevatorControl.touchButtonHatchBottom:
             self.elevatorControl.elevator_position_hatch1()
-        elif self.mainStick.getRawButton(self.HATCH_MIDDLE):
+        elif self.mainStick.getRawButton(self.HATCH_MIDDLE) or self.elevatorControl.touchButtonCargoMiddle:
             self.elevatorControl.elevator_position_hatch2()
-        elif self.mainStick.getRawButton(self.HATCH_HIGH):
+        elif self.mainStick.getRawButton(self.HATCH_HIGH) or self.elevatorControl.touchButtonCargoTop:
             self.elevatorControl.elevator_position_hatch3()
-        elif self.extraStick.getRawButton(5):
+        elif self.extraStick.getRawButton(self.CARGO_HAB) or self.elevatorControl.touchButtonCargoHab:
             self.elevatorControl.elevator_position_cargoBay()
 
     def hatchButtons(self):
