@@ -19,6 +19,7 @@ from components.shifter import Shifter
 from components.ledstrip import Ledstrip
 from components.flashlight import limelight
 
+from components.joystick import Joystick
 
 class MyRobot(MagicRobot):
 
@@ -27,6 +28,7 @@ class MyRobot(MagicRobot):
     #
     # Define components here
     #
+    joystick: Joystick
     shifter: Shifter
     elevatorControl: ElevatorControl
     drivetrain: Drivetrain
@@ -113,7 +115,7 @@ class MyRobot(MagicRobot):
         #     self.ledstrip.setMode(0.61)
 
     def drive(self):
-        self.drivetrain.drive(self.mainStick.getY(), -self.mainStick.getZ())
+        self.drivetrain.drive(self.joystick.getRawAxis(), -self.joystick.getTwist())
 
     def cargoButtons(self):
         if self.mainStick.getRawButton(self.CARGO_INTAKE):
