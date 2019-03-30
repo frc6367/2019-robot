@@ -13,7 +13,7 @@ class Joystick():
         self.tTwist = 0.54176
         self.bTwist = -0.56538
 
-    def getRawAxis(self):
+    def getAxis(self):
         y = self.mainStick.getY()
         scale = 1
 

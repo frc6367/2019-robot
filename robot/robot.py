@@ -115,7 +115,7 @@ class MyRobot(MagicRobot):
         #     self.ledstrip.setMode(0.61)
 
     def drive(self):
-        self.drivetrain.drive(self.joystick.getRawAxis(), -self.joystick.getTwist())
+        self.drivetrain.drive(self.joystick.getAxis(), -self.joystick.getTwist())
 
     def cargoButtons(self):
         if self.mainStick.getRawButton(self.CARGO_INTAKE):
