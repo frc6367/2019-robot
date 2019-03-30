@@ -7,6 +7,14 @@ class Elevator:
 
     motor1: ctre.WPI_TalonSRX
     target1 = tunable(0)
+    touchButtonCargoBottom = tunable(False)
+    touchButtonCargoMiddle = tunable(False)
+    touchButtonCargoTop = tunable(False)
+    touchButtonHatchBottom = tunable(False)
+    touchButtonHatchMiddle = tunable(False)
+    touchButtonHatchTop = tunable(False)
+    touchButtonIntake = tunable(False)
+    touchButtonCargoHab = tunable(False)
 
     def setup(self):
 
