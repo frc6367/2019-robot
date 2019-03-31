@@ -1,6 +1,7 @@
 import wpilib
 
-class Joystick():
+
+class Joystick:
     mainStick: wpilib.Joystick
 
     def setup(self):
@@ -19,13 +20,11 @@ class Joystick():
 
         if y < -self.t:
             return scale * (self.m * y - self.b)
-    
+
         if y > -self.t and y < self.t:
-            return scale * (1 / (pow(self.s,2.0)) * pow(y,3.0))
+            return scale * (1 / (pow(self.s, 2.0)) * pow(y, 3.0))
         else:
             return scale * (self.m * y + self.b)
-
-
 
     def getTwist(self):
         z = self.mainStick.getZ()
@@ -35,9 +34,9 @@ class Joystick():
             return scale * (self.mTwist * z - self.bTwist)
 
         if z > -self.tTwist and z < self.tTwist:
-            return scale * (1 / (pow(self.sTwist,2.0)) * pow(z,3.0))
+            return scale * (1 / (pow(self.sTwist, 2.0)) * pow(z, 3.0))
         else:
             return scale * (self.mTwist * z + self.bTwist)
+
     def execute(self):
         pass
-  

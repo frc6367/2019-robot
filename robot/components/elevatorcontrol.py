@@ -34,14 +34,13 @@ class ElevatorControl:
     touchButtonIntake = tunable(False)
     touchButtonCargoHab = tunable(False)
 
-
     def setup(self):
         self.state = 0
         self.armState = 0
 
     def on_enable(self):
         self.elevator.set_target(0 * self.kEncoderPerInch)
- 
+
     def elevator_position_cargo_ground(self):
         # ground is always 0
         self.elevator.set_target(0 * self.kEncoderPerInch)
@@ -91,10 +90,9 @@ class ElevatorControl:
         self.arm.setBottom()
         self.hatch.unlock()
         self.touchButtonCargoHab = False
-    
+
     def isElevatorGround(self):
         return self.elevator.target1 == 0
 
     def execute(self):
         pass
-

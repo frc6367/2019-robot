@@ -3,9 +3,10 @@ import ctre
 from magicbot import feedback
 from magicbot import feedback, tunable
 
+
 class Cargo:
 
-    current  = tunable(0)
+    current = tunable(0)
     smooth = tunable(0)
     alpha = tunable(0.92)
     inThreshold = tunable(11)
@@ -15,7 +16,6 @@ class Cargo:
         self.speed = 0
         self.kMin = 1
         self.kMax = 4  #
-
 
     def shoot(self):
         self.speed = 1
@@ -27,7 +27,7 @@ class Cargo:
         self.speed = 0
 
     def isBallIn(self):
-        return self.smooth > self.inThreshold 
+        return self.smooth > self.inThreshold
 
     def execute(self):
         self.cargo_intake_motor.set(self.speed)

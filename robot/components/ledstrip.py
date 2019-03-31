@@ -1,5 +1,7 @@
 import wpilib
 from magicbot import tunable
+
+
 class Ledstrip:
 
     blinkin: wpilib.Spark

@@ -79,4 +79,3 @@ class Elevator:
     ## Incremental up and down
     def execute(self):
         self.motor1.set(ctre.WPI_TalonSRX.ControlMode.MotionMagic, self.target1)
-

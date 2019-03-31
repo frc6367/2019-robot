@@ -51,7 +51,7 @@ class Arm:
 
     def isArmTargetTop(self):
         return self.target == self.top
-    
+
     def isArmTargetBottom(self):
         return self.target == self.bottom
 
@@ -65,4 +65,3 @@ class Arm:
             self.arm_motor.set(0)
         else:
             self.arm_pidController.setReference(self.target, rev.ControlType.kPosition)
-
