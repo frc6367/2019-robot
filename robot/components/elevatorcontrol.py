@@ -49,7 +49,7 @@ class ElevatorControl(StateMachine):
 
     def elevator_position_cargo_ground(self):
         # ground is always 0
-        self._start_control(0, self.arm.setBottom, self.hatch.unlock)
+        self._start_control(0, self.arm.setBottom, self.hatch.unlock, False)
         self.touchButtonIntake = False
 
     def isPositionCargoGround(self):
@@ -57,34 +57,34 @@ class ElevatorControl(StateMachine):
 
     # Cargo is a bit higher than Hatch level
     def elevator_position_cargo1(self):
-        self._start_control(self.low, self.arm.setMiddle, self.hatch.unlock)
+        self._start_control(self.low, self.arm.setMiddle, self.hatch.unlock, False)
         self.touchButtonCargoBottom = False
 
     def elevator_position_cargo2(self):
-        self._start_control(self.middle, self.arm.setMiddle, self.hatch.unlock)
+        self._start_control(self.middle, self.arm.setMiddle, self.hatch.unlock, False)
         self.touchButtonCargoMiddle = False
 
     def elevator_position_cargo3(self):
-        self._start_control(self.top, self.arm.setMiddleTop, self.hatch.unlock)
+        self._start_control(self.top, self.arm.setMiddleTop, self.hatch.unlock, False)
         self.touchButtonCargoTop = False
 
     def elevator_position_hatch1(self):
-        self._start_control(self.bottom, self.arm.setTop, self.hatch.lock)
+        self._start_control(self.bottom, self.arm.setTop, self.hatch.lock, False)
         self.touchButtonHatchBottom = False
 
     def elevator_position_hatch2(self):
-        self._start_control(self.middle, self.arm.setTop, self.hatch.lock)
+        self._start_control(self.middle, self.arm.setTop, self.hatch.lock, True)
         self.touchButtonHatchMiddle = False
 
     def elevator_position_hatch3(self):
-        self._start_control(self.top, self.arm.setTop, self.hatch.lock)
+        self._start_control(self.top, self.arm.setTop, self.hatch.lock, False)
         self.touchButtonHatchTop = False
 
     def elevator_position_cargoBay(self):
-        self._start_control(self.middle, self.arm.setBottom, self.hatch.unlock)
+        self._start_control(self.middle, self.arm.setBottom, self.hatch.unlock, True)
         self.touchButtonCargoHab = False
 
-    def _start_control(self, elevatorTarget, armPos, hatchState):
+    def _start_control(self, elevatorTarget, armPos, hatchState, delay):
         # Only begin control IFF it wasn't asked for
         elevatorTarget = elevatorTarget * self.kEncoderPerInch
         if self.armPos == armPos and self.elevatorTarget == elevatorTarget:
@@ -93,8 +93,13 @@ class ElevatorControl(StateMachine):
         hatchState()
         self.armPos = armPos
         self.elevatorTarget = elevatorTarget
+
+        if not delay:
+            self.elevator.set_target(self.elevatorTarget)
+            armPos()
+
         # IF GOING DOWN
-        if self.elevator.target1 > elevatorTarget:
+        elif self.elevator.target1 > elevatorTarget:
             self.engage("moveArmFirst", True)
         # Otherwise going up
         else:
