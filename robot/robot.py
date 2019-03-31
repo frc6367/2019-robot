@@ -189,8 +189,7 @@ class MyRobot(MagicRobot):
             or (
                 self.autoEnable
                 and self.cargo.isBallIn()
-                and self.arm.isArmTargetBottom()
-                and self.elevatorControl.isElevatorGround()
+                and self.elevatorControl.isPositionCargoGround()
             )
         ):
             self.elevatorControl.elevator_position_hatch2()

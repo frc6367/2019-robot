@@ -52,6 +52,9 @@ class ElevatorControl(StateMachine):
         self._start_control(0, self.arm.setBottom, self.hatch.unlock)
         self.touchButtonIntake = False
 
+    def isPositionCargoGround(self):
+        return self.elevatorTarget == 0 and self.armPos == self.arm.setBottom
+
     # Cargo is a bit higher than Hatch level
     def elevator_position_cargo1(self):
         self._start_control(self.low, self.arm.setMiddle, self.hatch.unlock)
@@ -80,9 +83,6 @@ class ElevatorControl(StateMachine):
     def elevator_position_cargoBay(self):
         self._start_control(self.middle, self.arm.setBottom, self.hatch.unlock)
         self.touchButtonCargoHab = False
-
-    def isElevatorGround(self):
-        return self.elevator.target1 == 0
 
     def _start_control(self, elevatorTarget, armPos, hatchState):
         # Only begin control IFF it wasn't asked for
