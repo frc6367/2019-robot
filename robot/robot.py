@@ -102,26 +102,26 @@ class MyRobot(MagicRobot):
         self.cargoButtons()  # LEFT BUTTONS: 3 and 5b
         self.elevatorButtons()  # LEFT BUTTONS: 1 AND 7 - 12
         self.shiftButtons()  # RIGHT BUTTONS: 1
-        self.autoAlign()
-        self.ledButtons()
+        # self.autoAlign()
+        # self.ledButtons()
 
-    def ledButtons(self):
-        # if self.mainStick.getRawButton(7):
-        #    self.ledstrip.setMode(-0.97)
-        pass
+    # def ledButtons(self):
+    # if self.mainStick.getRawButton(7):
+    #    self.ledstrip.setMode(-0.97)
+    # pass
 
-    def autoAlign(self):
-        pass
-        # if self.flashlight.autoCheck():
-        #     self.ledstrip.setMode(0.67)
-        #     if self.mainStick.getRawButton(2):
-        #         self.flashlight.autoAlign()
-        #         if not self.flashlight.absdistCheck():
-        #             self.ledstrip.setMode(0.77)
-        #         else:
-        #             self.ledstrip.setMode(0.27)
-        # else:
-        #     self.ledstrip.setMode(0.61)
+    # def autoAlign(self):
+    # pass
+    # if self.flashlight.autoCheck():
+    #     self.ledstrip.setMode(0.67)
+    #     if self.mainStick.getRawButton(2):
+    #         self.flashlight.autoAlign()
+    #         if not self.flashlight.absdistCheck():
+    #             self.ledstrip.setMode(0.77)
+    #         else:
+    #             self.ledstrip.setMode(0.27)
+    # else:
+    #     self.ledstrip.setMode(0.61)
 
     def drive(self):
         self.drivetrain.drive(self.getYAxisDrive(), -self.getTwist())
@@ -158,50 +158,29 @@ class MyRobot(MagicRobot):
             self.cargo.off()
 
     def elevatorButtons(self):
-        if (
-            self.mainStick.getRawButton(self.CARGO_GROUND)
-            or self.elevatorControl.touchButtonIntake
-        ):
+        # fmt: off
+        if self.mainStick.getRawButton(self.CARGO_GROUND) or self.elevatorControl.touchButtonIntake:
             self.elevatorControl.elevator_position_cargo_ground()
-        elif (
-            self.mainStick.getRawButton(self.CARGO_LOW)
-            or self.elevatorControl.touchButtonCargoBottom
-        ):
+        elif self.mainStick.getRawButton(self.CARGO_LOW) or self.elevatorControl.touchButtonCargoBottom:
             self.elevatorControl.elevator_position_cargo1()
-        elif (
-            self.mainStick.getRawButton(self.CARGO_MIDDLE)
-            or self.elevatorControl.touchButtonCargoMiddle
-        ):
+        elif self.mainStick.getRawButton(self.CARGO_MIDDLE) or self.elevatorControl.touchButtonCargoMiddle:
             self.elevatorControl.elevator_position_cargo2()
-        elif (
-            self.mainStick.getRawButton(self.CARGO_HIGH)
-            or self.elevatorControl.touchButtonCargoTop
-        ):
+        elif self.mainStick.getRawButton(self.CARGO_HIGH) or self.elevatorControl.touchButtonCargoTop:
             self.elevatorControl.elevator_position_cargo3()
-        elif (
-            self.mainStick.getRawButton(self.HATCH_LOW)
-            or self.elevatorControl.touchButtonHatchBottom
-        ):
+        elif self.mainStick.getRawButton(self.HATCH_LOW) or self.elevatorControl.touchButtonHatchBottom:
             self.elevatorControl.elevator_position_hatch1()
-        elif (
-            self.mainStick.getRawButton(self.HATCH_MIDDLE)
-            or self.elevatorControl.touchButtonHatchMiddle
-            or (
+        elif self.mainStick.getRawButton(self.HATCH_MIDDLE) or self.elevatorControl.touchButtonHatchMiddle or (
                 self.autoEnable
                 and self.cargo.isBallIn()
                 and self.elevatorControl.isPositionCargoGround()
-            )
-        ):
+            ):
             self.elevatorControl.elevator_position_hatch2()
-        elif (
-            self.mainStick.getRawButton(self.HATCH_HIGH)
-            or self.elevatorControl.touchButtonHatchTop
-        ):
+        elif self.mainStick.getRawButton(self.HATCH_HIGH) or self.elevatorControl.touchButtonHatchTop:
             self.elevatorControl.elevator_position_hatch3()
-        elif (
-            self.extraStick.getRawButton(5) or self.elevatorControl.touchButtonCargoHab
-        ):
+        elif self.extraStick.getRawButton(5) or self.elevatorControl.touchButtonCargoHab:
             self.elevatorControl.elevator_position_cargoBay()
+
+        # fmt: on
 
     def hatchButtons(self):
         if self.mainStick.getRawButton(self.HATCH_CLOSED):
