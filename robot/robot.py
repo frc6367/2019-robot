@@ -181,17 +181,17 @@ class MyRobot(MagicRobot):
         elif (
             self.mainStick.getRawButton(self.HATCH_LOW)
             or self.elevatorControl.touchButtonHatchBottom
+        ):
+            self.elevatorControl.elevator_position_hatch1()
+        elif (
+            self.mainStick.getRawButton(self.HATCH_MIDDLE)
+            or self.elevatorControl.touchButtonHatchMiddle
             or (
                 self.autoEnable
                 and self.cargo.isBallIn()
                 and self.arm.isArmTargetBottom()
                 and self.elevatorControl.isElevatorGround()
             )
-        ):
-            self.elevatorControl.elevator_position_hatch1()
-        elif (
-            self.mainStick.getRawButton(self.HATCH_MIDDLE)
-            or self.elevatorControl.touchButtonHatchMiddle
         ):
             self.elevatorControl.elevator_position_hatch2()
         elif (
