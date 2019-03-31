@@ -41,6 +41,9 @@ class ElevatorControl(StateMachine):
         self.state = 0
         self.armState = 0
 
+        self.armPos = None
+        self.elevatorTarget = None
+
     def on_enable(self):
         self.elevator.set_target(0 * self.kEncoderPerInch)
 
@@ -82,9 +85,14 @@ class ElevatorControl(StateMachine):
         return self.elevator.target1 == 0
 
     def _start_control(self, elevatorTarget, armPos, hatchState):
+        # Only begin control IFF it wasn't asked for
+        elevatorTarget = elevatorTarget * self.kEncoderPerInch
+        if self.armPos == armPos and self.elevatorTarget == elevatorTarget:
+            return
+
         hatchState()
         self.armPos = armPos
-        self.elevatorTarget = elevatorTarget * self.kEncoderPerInch
+        self.elevatorTarget = elevatorTarget
         # IF GOING DOWN
         if self.elevator.target1 > elevatorTarget:
             self.engage("moveArmFirst", True)
@@ -92,13 +100,11 @@ class ElevatorControl(StateMachine):
         else:
             self.engage("moveElevatorFirst", True)
 
-    @timed_state(
-        duration=0.25, must_finish=True, next_state="moveElevatorSecond", first=True
-    )
+    @timed_state(duration=0.25, must_finish=True, next_state="moveElevatorSecond")
     def moveArmFirst(self):
         self.armPos()
 
-    @state()
+    @state(must_finish=True)
     def moveElevatorSecond(self):
         self.elevator.set_target(self.elevatorTarget)
 
@@ -108,6 +114,10 @@ class ElevatorControl(StateMachine):
         self.cargo.intake()
         self.elevator.set_target(self.elevatorTarget)
 
-    @state()
+    @state(must_finish=True)
     def moveArmSecond(self):
         self.armPos()
+
+    @state(first=True)
+    def ignored(self):
+        pass
